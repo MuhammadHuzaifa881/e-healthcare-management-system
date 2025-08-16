@@ -1,12 +1,27 @@
-import { Suspense, lazy } from 'react';
-import { Route, Routes } from "react-router-dom";
+import { Suspense, lazy, useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
-import { Bounce, ToastContainer } from 'react-toastify';
-import { RingLoader } from 'react-spinners';
+import { Bounce, ToastContainer } from "react-toastify";
+import { RingLoader } from "react-spinners";
 
 // Lazy load your main components
-const AuthRoutes = lazy(() => import("./routes/auth-routes"));
-const DashboardLayout = lazy(() => import("./components/layouts/dashboard-layout"));
+const AuthLayout = lazy(() => import("./components/layouts/auth-layout"));
+const DashboardLayout = lazy(() =>
+  import("./components/layouts/dashboard-layout")
+);
+
+const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();
+
+  const authToken = localStorage.getItem("authToken");
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/auth/login");
+    }
+  }, [navigate, authToken]);
+
+  return children;
+};
 
 const App = () => {
   return (
@@ -24,8 +39,8 @@ const App = () => {
         theme="light"
         transition={Bounce}
       />
-      
-      <Suspense 
+
+      <Suspense
         fallback={
           <div className="spinner-container">
             <RingLoader color="#3DA1F5" size={80} />
@@ -33,8 +48,15 @@ const App = () => {
         }
       >
         <Routes>
-          <Route path="/auth/*" element={<AuthRoutes />} />
-          <Route path="/*" element={<DashboardLayout />} />
+          <Route path="/auth/*" element={<AuthLayout />} />
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Suspense>
     </>
