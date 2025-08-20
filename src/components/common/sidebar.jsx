@@ -37,7 +37,11 @@ const Sidebars = ({ userType, isOpen }) => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userRole");
     navigate("/auth/login");
+
   };
 
   const renderMenuItems = () => {

@@ -137,7 +137,7 @@ export const doctorItems = [
       },
       {
         title: 'Upcoming',
-        path: '/appointments/upcoming'
+        path: '/appointments/upcomming-schedule'
       }
     ]
   },
@@ -147,7 +147,7 @@ export const doctorItems = [
     submenu: [
       {
         title: 'My Patients',
-        path: '/patients/my'
+        path: '/patients/my-patients'
       },
       {
         title: 'Medical Records',
@@ -163,10 +163,6 @@ export const doctorItems = [
         title: 'Create New',
         path: '/prescriptions/new'
       },
-      {
-        title: 'History',
-        path: '/prescriptions/history'
-      }
     ]
   },
   {
@@ -177,10 +173,6 @@ export const doctorItems = [
         title: 'Lab Test Orders',
         path: '/diagnostics/orders'
       },
-      {
-        title: 'Results',
-        path: '/diagnostics/results'
-      }
     ]
   },
   {

@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -75,10 +75,10 @@ const LoginForm = () => {
       localStorage.setItem("userEmail", values.email);
 
       // Determine user role
-      let role = "user";
+      let role = "patient";
       if (values.email.includes("hospital")) role = "hospital";
       if (values.email.includes("doctor")) role = "doctor";
-
+   if (values.email.includes("patient")) role = "patient";
       localStorage.setItem("userRole", role);
 
       toast.success("Login successful! Redirecting...");
