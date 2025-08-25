@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import React from 'react'
 import { FaCalendarAlt, FaPlus, FaPrint } from 'react-icons/fa'
 
@@ -13,17 +14,17 @@ const UpcommingScheduleHeader = ({setIsNewAppointmentModalOpen}) => {
           </p>
         </div>
         <div className="mt-4 lg:mt-0 flex space-x-2">
-            <button 
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center shadow-md"
+            <Button 
+          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition flex items-center shadow-md"
           onClick={() => setIsNewAppointmentModalOpen(true)}
         >
           <FaPlus className="mr-2" />
           New Appointment
-        </button>
-          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition flex items-center">
+        </Button>
+          <Button className="px-4 py-2 text-white bg-primary-400 border border-gray-300 rounded-lg hover:bg-primary-500 transition flex items-center">
             <FaPrint className="mr-2" />
             Print Schedule
-          </button>
+          </Button>
         </div>
       </div>
 

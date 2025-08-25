@@ -72,10 +72,6 @@ const TreatmentSummaryPage = () => {
   );
 };
 
-// Patient Treatment Detail Component
-
-
-// Treatment Card Component
 
 
 

@@ -41,7 +41,6 @@ const Sidebars = ({ userType, isOpen }) => {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userRole");
     navigate("/auth/login");
-
   };
 
   const renderMenuItems = () => {
@@ -55,23 +54,31 @@ const Sidebars = ({ userType, isOpen }) => {
             label={isOpen ? item.title : ""}
             icon={<IconComponent />}
             defaultOpen={activePath.startsWith(item.path)}
-            className={`text-gray-700 hover:text-primary-600 ${
+            className={`text-gray-700 ${
               activePath.startsWith(item.path) ? "!text-primary-600" : ""
             }`}
             rootStyles={{
               "& > .ps-menu-button": {
                 "&:hover": {
                   color: "#a855f7",
+                  backgroundColor: "#faf5ff",
                 },
                 ...(activePath.startsWith(item.path) && {
                   borderLeft: "4px solid #a855f7",
                   paddingLeft: "calc(1rem - 4px)",
+                  backgroundColor: "#faf5ff",
                 }),
               },
               "& > .ps-submenu-content": {
                 zIndex: 1000,
                 backgroundColor: "white",
-                // boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              },
+              // Fix for submenu items hover
+              "& .ps-menu-button": {
+                "&:hover": {
+                  color: "#a855f7",
+                  backgroundColor: "#faf5ff",
+                },
               },
             }}
           >
@@ -86,9 +93,14 @@ const Sidebars = ({ userType, isOpen }) => {
                 }`}
                 rootStyles={{
                   "& > .ps-menu-button": {
+                    "&:hover": {
+                      color: "#a855f7",
+                      backgroundColor: "#faf5ff",
+                    },
                     ...(activePath === subItem.path && {
                       borderLeft: "4px solid #a855f7",
                       paddingLeft: "calc(1rem - 4px)",
+                      backgroundColor: "#faf5ff",
                     }),
                   },
                 }}
@@ -112,16 +124,21 @@ const Sidebars = ({ userType, isOpen }) => {
           key={index}
           icon={<IconComponent />}
           onClick={() => handleItemClick(item.path)}
-          className={`text-gray-700 hover:bg-primary-50 hover:text-primary-600 ${
+          className={`text-gray-700 ${
             activePath === item.path
               ? "!bg-primary-50 !text-primary-600 font-medium"
               : ""
           }`}
           rootStyles={{
             "& > .ps-menu-button": {
+              "&:hover": {
+                color: "#a855f7",
+                backgroundColor: "#faf5ff",
+              },
               ...(activePath === item.path && {
                 borderLeft: "4px solid #a855f7",
                 paddingLeft: "calc(1rem - 4px)",
+                backgroundColor: "#faf5ff",
               }),
             },
           }}
@@ -143,7 +160,7 @@ const Sidebars = ({ userType, isOpen }) => {
         position: "fixed",
         borderRight: "1px solid #e5e7eb",
         boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-        zIndex: 50, // Ensure sidebar stays above page content
+        zIndex: 50,
       }}
     >
       {/* Logo Section */}
@@ -183,7 +200,15 @@ const Sidebars = ({ userType, isOpen }) => {
         <MenuItem
           icon={<FiLogOut />}
           onClick={handleLogout}
-          className="text-gray-700 hover:bg-primary-50 hover:text-primary-600"
+          className="text-gray-700"
+          rootStyles={{
+            "& > .ps-menu-button": {
+              "&:hover": {
+                color: "#a855f7",
+                backgroundColor: "#faf5ff",
+              },
+            },
+          }}
         >
           {isOpen ? "Logout" : ""}
         </MenuItem>

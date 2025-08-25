@@ -1,7 +1,8 @@
+import { appointments } from "@/constants/doctor/appointments/todays-schedule";
 import { FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
 
-const StatusCards = ({appointments}) => {
+const StatusCards = () => {
         // Filter appointments by status
   const confirmedAppointments = appointments.filter(app => app.status === 'confirmed');
   const pendingAppointments = appointments.filter(app => app.status === 'pending');

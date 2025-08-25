@@ -18,9 +18,9 @@ const TreatmentSummaryHeader = () => {
           <Button variant="outline" className="flex items-center gap-2">
             <FiPrinter /> Print
           </Button>
-          <Button className="flex items-center gap-2">
+          {/* <Button className="flex items-center gap-2 bg-primary-600 text-white hover:bg-primary-700">
             <FiPlus /> New Plan
-          </Button>
+          </Button> */}
         </div>
       </div>
     </>

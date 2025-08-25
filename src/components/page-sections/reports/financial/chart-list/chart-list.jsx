@@ -15,40 +15,11 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import { expenseBreakdown, financialData, revenueByService } from "@/constants/hospital/reports/financial";
 const ChartList = () => {
-  // Sample financial data
-  const financialData = [
-    { name: "Jan", revenue: 125000, expenses: 85000, profit: 40000 },
-    { name: "Feb", revenue: 135000, expenses: 90000, profit: 45000 },
-    { name: "Mar", revenue: 145000, expenses: 95000, profit: 50000 },
-    { name: "Apr", revenue: 155000, expenses: 100000, profit: 55000 },
-    { name: "May", revenue: 165000, expenses: 105000, profit: 60000 },
-    { name: "Jun", revenue: 175000, expenses: 110000, profit: 65000 },
-    { name: "Jul", revenue: 185000, expenses: 115000, profit: 70000 },
-    { name: "Aug", revenue: 195000, expenses: 120000, profit: 75000 },
-    { name: "Sep", revenue: 205000, expenses: 125000, profit: 80000 },
-    { name: "Oct", revenue: 215000, expenses: 130000, profit: 85000 },
-    { name: "Nov", revenue: 225000, expenses: 135000, profit: 90000 },
-    { name: "Dec", revenue: 235000, expenses: 140000, profit: 95000 },
-  ];
 
-  const revenueByService = [
-    { name: "Consultations", value: 125000 },
-    { name: "Diagnostics", value: 85000 },
-    { name: "Procedures", value: 65000 },
-    { name: "Medications", value: 45000 },
-    { name: "Other", value: 25000 },
-  ];
+    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
-  const expenseBreakdown = [
-    { name: "Staff", value: 65000 },
-    { name: "Medicines", value: 35000 },
-    { name: "Equipment", value: 25000 },
-    { name: "Facilities", value: 15000 },
-    { name: "Other", value: 10000 },
-  ];
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
   return (
     <div>

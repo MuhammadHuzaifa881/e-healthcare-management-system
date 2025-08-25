@@ -13,10 +13,10 @@ const DoctorTodaysScheduleHeader = () => {
           </p>
         </div>
         <div className="mt-4 md:mt-0 flex space-x-2">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          {/* <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
             Add Appointment
-          </button>
-          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+          </button> */}
+          <button className="px-4 py-2 text-white bg-primary-600 hover:bg-primary-700 border hover:border-gray-300 rounded-lg transition">
             Print Schedule
           </button>
         </div>

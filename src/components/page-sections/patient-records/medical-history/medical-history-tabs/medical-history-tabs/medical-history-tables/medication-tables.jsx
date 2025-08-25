@@ -13,34 +13,19 @@ import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { TabsContent } from "@/components/ui/tabs";
 import TableCardHead from "./table-card-head";
 import DeleteModal from "@/components/modals/common/delete-modal";
+import { medicationsList } from "@/constants/doctor/patient-records/medical-history";
 
 const MedicationTables = () => {
-  const [medications, setMedications] = useState([
-    {
-      id: 1,
-      name: "Metformin",
-      dosage: "500mg",
-      frequency: "Twice daily",
-      startDate: "2018-05-20",
-      notes: "For diabetes",
-    },
-    {
-      id: 2,
-      name: "Lisinopril",
-      dosage: "10mg",
-      frequency: "Daily",
-      startDate: "2017-12-01",
-      notes: "For blood pressure",
-    },
-    {
-      id: 3,
-      name: "Albuterol",
-      dosage: "90mcg",
-      frequency: "As needed",
-      startDate: "2015-03-15",
-      notes: "Inhaler for asthma",
-    },
-  ]);
+  const [medications, setMedications] = useState(medicationsList);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(medications.length / itemsPerPage);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = medications.slice(indexOfFirstItem, indexOfLastItem);
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -53,9 +38,16 @@ const MedicationTables = () => {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      setMedications(
-        medications.filter((med) => med.id !== medicationToDelete)
+      const updated = medications.filter(
+        (med) => med.id !== medicationToDelete
       );
+      setMedications(updated);
+
+      // Adjust pagination if deleting last item on last page
+      if (indexOfFirstItem >= updated.length && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Delete failed", error);
@@ -86,7 +78,7 @@ const MedicationTables = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {medications.map((med) => (
+                {currentItems.map((med) => (
                   <TableRow key={med.id}>
                     <TableCell className="font-medium">{med.name}</TableCell>
                     <TableCell>{med.dosage}</TableCell>
@@ -114,6 +106,27 @@ const MedicationTables = () => {
                 ))}
               </TableBody>
             </Table>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-between items-center mt-4">
+              <Button
+                variant="outline"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-gray-600">
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                Next
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </TabsContent>

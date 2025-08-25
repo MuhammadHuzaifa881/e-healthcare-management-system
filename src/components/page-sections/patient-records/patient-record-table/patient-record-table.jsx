@@ -23,7 +23,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import DeleteModal from "@/components/modals/common/delete-modal";
 
 const PatientRecordTable = ({
@@ -31,13 +31,13 @@ const PatientRecordTable = ({
   totalPages,
   currentPage,
   paginate,
-  setPatients,
-  patients
+  handleEditDetail
 }) => {
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [patientToDelete, setPatientToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const dropdownRef = useRef(null);
 
   // Handle delete confirmation
   const handleConfirmDelete = async () => {
@@ -54,8 +54,18 @@ const PatientRecordTable = ({
     }
   };
 
+  // Close dropdown when modal opens
+  useEffect(() => {
+    if (deleteModalOpen && dropdownRef.current) {
+      const dropdownTrigger = dropdownRef.current.querySelector('[data-state="open"]');
+      if (dropdownTrigger) {
+        dropdownTrigger.click(); // Close the dropdown
+      }
+    }
+  }, [deleteModalOpen]);
+
   return (
-    <div className="overflow-x-auto bg-white p-4 rounded-lg">
+    <div className="overflow-x-auto bg-white p-4 rounded-lg pointer-events-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -86,33 +96,35 @@ const PatientRecordTable = ({
                 </TableCell>
                 <TableCell>{getStatusBadge(patient.status)}</TableCell>
                 <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <FiMoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <FaUser className="mr-2" /> View Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <FaEdit className="mr-2" /> Edit Details
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <FaHistory className="mr-2" /> Medical History
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        className="text-red-600"
-                        onClick={() => {
-                          setPatientToDelete(patient.id);
-                          setDeleteModalOpen(true);
-                        }}
-                      >
-                        <FaTrash className="mr-2" /> Delete Patient
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div ref={dropdownRef}>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <FiMoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
+                        <DropdownMenuItem>
+                          <FaUser className="mr-2" /> View Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEditDetail(patient)}>
+                          <FaEdit className="mr-2" /> Edit Details
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <FaHistory className="mr-2" /> Medical History
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          className="text-red-600"
+                          onClick={() => {
+                            setPatientToDelete(patient.id);
+                            setDeleteModalOpen(true);
+                          }}
+                        >
+                          <FaTrash className="mr-2" /> Delete Patient
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </TableCell>
               </TableRow>
             ))
@@ -167,7 +179,10 @@ const PatientRecordTable = ({
       {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setPatientToDelete(null);
+        }}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}
         title="Delete Patient Record"

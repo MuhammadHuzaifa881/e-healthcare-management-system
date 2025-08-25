@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <>
+    <div className="pointer-events-auto">
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -59,7 +59,7 @@ const App = () => {
           />
         </Routes>
       </Suspense>
-    </>
+    </div>
   );
 };
 

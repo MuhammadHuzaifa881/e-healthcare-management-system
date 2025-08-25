@@ -4,38 +4,15 @@ import AddDoctor from "@/components/modals/add-doctor";
 import AllDoctorHeader from "@/components/page-sections/hospital/staff-management/all-doctors/header/header";
 import DoctorTable from "@/components/page-sections/hospital/staff-management/all-doctors/doctor-table/doctor-table";
 import SearchDoctor from "@/components/page-sections/hospital/staff-management/all-doctors/search-doctor/search-doctor";
+import { allDoctors } from "@/constants/hospital/staff-management/all-doctors";
 
 const AllDoctors = () => {
-  const [doctors, setDoctors] = useState([
-    {
-      id: 1,
-      name: "Dr. Sarah Johnson",
-      specialty: "Cardiology",
-      email: "sarah.johnson@hospital.com",
-      phone: "(555) 123-4567",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Dr. Michael Chen",
-      specialty: "Neurology",
-      email: "michael.chen@hospital.com",
-      phone: "(555) 234-5678",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Dr. Emily Wilson",
-      specialty: "Pediatrics",
-      email: "emily.wilson@hospital.com",
-      phone: "(555) 345-6789",
-      status: "On Leave",
-    },
-  ]);
+  const [doctors, setDoctors] = useState(allDoctors);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDoctor, setCurrentDoctor] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [editData,setEditData]=useState(null)
   const [formData, setFormData] = useState({
     name: "",
     specialty: "",
@@ -51,8 +28,13 @@ const AllDoctors = () => {
       doctor.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleEditID=(data)=>{
+    setEditData(data);
+    setIsDialogOpen(true)
+  }
+
   return (
-    <div className="p-6 max-w-full mx-auto bg-blue-300 min-h-screen rounded-lg">
+    <div className="p-6 max-w-full mx-auto bg-blue-300 rounded-lg min-h-screen">
       <AllDoctorHeader
         setCurrentDoctor={setCurrentDoctor}
         setIsDialogOpen={setIsDialogOpen}
@@ -60,16 +42,23 @@ const AllDoctors = () => {
 
       <SearchDoctor searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      <DoctorTable filteredDoctors={filteredDoctors} />
+      <DoctorTable filteredDoctors={filteredDoctors} doctors={doctors} 
+          isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        handleEditID={handleEditID}
+        currentDoctor={currentDoctor}
+        setCurrentDoctor={setCurrentDoctor}
+        setFormData={setFormData}
+      />
 
       <AddDoctor
         isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
         currentDoctor={currentDoctor}
         setCurrentDoctor={setCurrentDoctor}
         setDoctors={setDoctors}
         formData={formData}
         setFormData={setFormData}
-        setIsDialogOpen={setIsDialogOpen}
       />
     </div>
   );

@@ -19,10 +19,12 @@ import {
 import  { useState } from "react";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
-const NursesTable = ({ nurses, setNurses }) => {
+const NursesTable = ({ nurses, setNurses,setNurseModalOpen,setEditData }) => {
+
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const nursesPerPage = 4;
+  const nursesPerPage = 10;
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -82,12 +84,19 @@ const NursesTable = ({ nurses, setNurses }) => {
     return pageNumbers;
   };
 
+  const handleEdit=(data)=>{
+setEditData(data);
+setNurseModalOpen(true)
+
+  }
+
   return (
     <>
       <div className="rounded-md border p-4 bg-white">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Department</TableHead>
@@ -98,12 +107,13 @@ const NursesTable = ({ nurses, setNurses }) => {
             {currentNurses.length > 0 ? (
               currentNurses.map((nurse) => (
                 <TableRow key={nurse.id}>
-                  <TableCell className="font-medium">{nurse.name}</TableCell>
-                  <TableCell>{nurse.email}</TableCell>
-                  <TableCell>{nurse.department}</TableCell>
+                  <TableCell className="font-medium">{nurse?.id}</TableCell>
+                  <TableCell className="font-medium">{nurse?.name}</TableCell>
+                  <TableCell>{nurse?.email}</TableCell>
+                  <TableCell>{nurse?.department}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
-                      <Button variant="outline" size="icon">
+                      <Button variant="outline" size="icon" onClick={()=>handleEdit(nurse)}>
                         <FiEdit2 className="h-4 w-4" />
                       </Button>
                       <Button 

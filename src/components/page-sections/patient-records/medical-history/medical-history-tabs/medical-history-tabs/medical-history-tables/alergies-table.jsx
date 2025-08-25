@@ -12,33 +12,26 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
 import { TabsContent } from "@/components/ui/tabs";
 import TableCardHead from "./table-card-head";
 import DeleteModal from "@/components/modals/common/delete-modal";
+import { alergieslist } from "@/constants/doctor/patient-records/medical-history";
 
 const AllergiesTable = () => {
-  const [allergies, setAllergies] = useState([
-    {
-      id: 1,
-      name: "Penicillin",
-      reaction: "Rash",
-      severity: "Moderate",
-      notes: "Discovered in childhood",
-    },
-    {
-      id: 2,
-      name: "Shellfish",
-      reaction: "Hives",
-      severity: "Severe",
-      notes: "Anaphylactic reaction",
-    },
-  ]);
+  const [allergies, setAllergies] = useState(alergieslist);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [allergyToDelete, setAllergyToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(allergies.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = allergies.slice(startIndex, startIndex + itemsPerPage);
 
   // Handle delete confirmation
   const handleConfirmDelete = async () => {
@@ -46,7 +39,14 @@ const AllergiesTable = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setAllergies(allergies.filter(allergy => allergy.id !== allergyToDelete));
+      const updatedAllergies = allergies.filter(allergy => allergy.id !== allergyToDelete);
+      setAllergies(updatedAllergies);
+      
+      // Adjust current page if needed after deletion
+      if (currentItems.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+      
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Delete failed", error);
@@ -54,6 +54,32 @@ const AllergiesTable = () => {
       setIsDeleting(false);
       setAllergyToDelete(null);
     }
+  };
+
+  // Handle page change
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // Generate page numbers for pagination controls
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    
+    return pageNumbers;
   };
 
   return (
@@ -76,7 +102,7 @@ const AllergiesTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {allergies.map((allergy) => (
+                {currentItems.map((allergy) => (
                   <TableRow key={allergy.id}>
                     <TableCell className="font-medium">
                       {allergy.name}
@@ -117,6 +143,61 @@ const AllergiesTable = () => {
                 ))}
               </TableBody>
             </Table>
+            
+            {/* Pagination Controls */}
+            {allergies.length > itemsPerPage && (
+              <div className="flex items-center justify-between mt-4">
+                <div className="text-sm text-muted-foreground">
+                  Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, allergies.length)} of {allergies.length} entries
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(1)}
+                    disabled={currentPage === 1}
+                  >
+                    <FiChevronsLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    <FiChevronLeft className="h-4 w-4" />
+                  </Button>
+                  
+                  {getPageNumbers().map(page => (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    <FiChevronRight className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(totalPages)}
+                    disabled={currentPage === totalPages}
+                  >
+                    <FiChevronsRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </TabsContent>

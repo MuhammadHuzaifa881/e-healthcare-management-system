@@ -2,10 +2,12 @@ import { useState } from "react";
 import AllPatientHeader from "@/components/page-sections/patient-records/all-patients/header";
 import PatientRecordTable from "@/components/page-sections/patient-records/patient-record-table/patient-record-table";
 import AddPatient from "@/components/modals/add-patient";
+import { allPatients } from "@/constants/hospital/patient-records/all-patients";
 export default function AllPatients() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [patientModalOpen, setPatientModalOpen] = useState(false);
+  const [editDetail,setEditDetail]=useState(null)
   const [newPatient, setNewPatient] = useState({
     name: "",
     age: "",
@@ -14,44 +16,10 @@ export default function AllPatients() {
     phone: "",
     status: "active",
   });
-  const patientsPerPage = 8;
+  const patientsPerPage = 10;
 
     // Sample patient data
-  const [patients, setPatients] = useState(
-  [
-    {
-      id: "PT001",
-      name: "John Doe",
-      age: 35,
-      gender: "Male",
-      lastVisit: "2023-05-15",
-      status: "active",
-      email: "john.doe@example.com",
-      phone: "(555) 123-4567",
-    },
-    {
-      id: "PT002",
-      name: "Jane Smith",
-      age: 28,
-      gender: "Female",
-      lastVisit: "2023-06-20",
-      status: "active",
-      email: "jane.smith@example.com",
-      phone: "(555) 987-6543",
-    },
-    {
-      id: "PT003",
-      name: "Robert Johnson",
-      age: 42,
-      gender: "Male",
-      lastVisit: "2023-04-10",
-      status: "inactive",
-      email: "robert.j@example.com",
-      phone: "(555) 456-7890",
-    },
-    
-  ]
-);
+  const [patients, setPatients] = useState(allPatients);
 
 
   // Filter patients based on search term
@@ -73,6 +41,11 @@ export default function AllPatients() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handleEditDetail=(data)=>{
+  setEditDetail(data);
+  setPatientModalOpen(true)
+  }
+
   return (
     <div className="mx-auto px-4 py-8 bg-blue-300 min-h-screen rounded-lg">
       <AllPatientHeader
@@ -87,6 +60,7 @@ export default function AllPatients() {
         totalPages={totalPages}
         currentPage={currentPage}
         paginate={paginate}
+        handleEditDetail={handleEditDetail}
       />
 
       <AddPatient
@@ -94,7 +68,9 @@ export default function AllPatients() {
         newPatient={newPatient}
         setPatients={setPatients}
         setPatientModalOpen={setPatientModalOpen}
-        patientMdalOpen={patientModalOpen}
+        patientModalOpen={patientModalOpen}
+        editDetail={editDetail}
+        setEditDetail={setEditDetail}
       />
     </div>
   );

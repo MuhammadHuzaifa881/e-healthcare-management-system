@@ -3,6 +3,7 @@ import ControlFilters from "@/components/page-sections/doctor/appointments/upcom
 import UpcommingScheduleHeader from "@/components/page-sections/doctor/appointments/upcomming-schedule/header/header";
 import UpcommingScheduleStatusCards from "@/components/page-sections/doctor/appointments/upcomming-schedule/status-card/status-cards";
 import UpcommingAppointmentList from "@/components/page-sections/doctor/appointments/upcomming-schedule/upcomming-appointment-list/upcomming-appointment-list";
+import { upcomingAppointments } from "@/constants/doctor/appointments/upcomming-appointments";
 import { useState } from "react";
 
 const DoctorUpcomingSchedule = () => {
@@ -11,99 +12,7 @@ const DoctorUpcomingSchedule = () => {
   const [isNewAppointmentModalOpen, setIsNewAppointmentModalOpen] =
     useState(false);
   // Sample data for upcoming appointments
-  const upcomingAppointments = [
-    {
-      id: 1,
-      patient: "John Smith",
-      date: "2024-01-15",
-      time: "09:00 AM",
-      duration: "30 mins",
-      type: "Follow-up",
-      condition: "Hypertension",
-      status: "confirmed",
-      notes: "Needs BP check",
-      location: "Clinic",
-      priority: "normal",
-    },
-    {
-      id: 2,
-      patient: "Sarah Johnson",
-      date: "2024-01-15",
-      time: "02:30 PM",
-      duration: "45 mins",
-      type: "Consultation",
-      condition: "Diabetes",
-      status: "confirmed",
-      notes: "Review glucose levels",
-      location: "Telemedicine",
-      priority: "high",
-    },
-    {
-      id: 3,
-      patient: "Michael Brown",
-      date: "2024-01-16",
-      time: "10:15 AM",
-      duration: "30 mins",
-      type: "Follow-up",
-      condition: "Asthma",
-      status: "pending",
-      notes: "Check inhaler usage",
-      location: "Clinic",
-      priority: "normal",
-    },
-    {
-      id: 4,
-      patient: "Emily Davis",
-      date: "2024-01-17",
-      time: "11:00 AM",
-      duration: "60 mins",
-      type: "New Patient",
-      condition: "Migraine",
-      status: "confirmed",
-      notes: "Initial assessment",
-      location: "Clinic",
-      priority: "normal",
-    },
-    {
-      id: 5,
-      patient: "Robert Wilson",
-      date: "2024-01-18",
-      time: "03:00 PM",
-      duration: "30 mins",
-      type: "Vaccination",
-      condition: "Annual Checkup",
-      status: "cancelled",
-      notes: "Flu shot",
-      location: "Clinic",
-      priority: "low",
-    },
-    {
-      id: 6,
-      patient: "Lisa Taylor",
-      date: "2024-01-19",
-      time: "09:30 AM",
-      duration: "45 mins",
-      type: "Consultation",
-      condition: "Back Pain",
-      status: "confirmed",
-      notes: "Physical therapy follow-up",
-      location: "Telemedicine",
-      priority: "high",
-    },
-    {
-      id: 7,
-      patient: "David Miller",
-      date: "2024-01-22",
-      time: "01:00 PM",
-      duration: "30 mins",
-      type: "Routine Check",
-      condition: "General Health",
-      status: "confirmed",
-      notes: "Annual physical",
-      location: "Clinic",
-      priority: "normal",
-    },
-  ];
+  
 
   // Filter appointments based on selected status
   const filteredAppointments =

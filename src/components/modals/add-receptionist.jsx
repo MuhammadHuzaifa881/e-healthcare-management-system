@@ -18,6 +18,7 @@ const AddReceptionist = ({
   setCurrentReceptionist,
   receptionists,
   setReceptionists,
+  setIsEditMode
 }) => {
   // Handle form input changes
   const handleInputChange = (e) => {

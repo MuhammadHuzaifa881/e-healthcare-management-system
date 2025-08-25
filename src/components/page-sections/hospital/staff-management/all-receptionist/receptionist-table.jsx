@@ -26,11 +26,9 @@ const ReceptionistTable = ({
   currentPage,
   totalPages,
   setCurrentPage,
-  setReceptionists,
-  receptionists,
   setCurrentReceptionist,
   setIsEditMode,
-  setOpenDialog
+  setReceptionistModalOpen,
 }) => {
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -42,7 +40,7 @@ const ReceptionistTable = ({
     setIsDeleting(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Delete failed", error);
@@ -82,7 +80,7 @@ const ReceptionistTable = ({
   const handleEdit = (receptionist) => {
     setCurrentReceptionist(receptionist);
     setIsEditMode(true);
-    setOpenDialog(true);
+    setReceptionistModalOpen(true);
   };
 
   return (
@@ -91,6 +89,7 @@ const ReceptionistTable = ({
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID</TableHead>
               <TableHead>Receptionist</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Shift</TableHead>
@@ -101,6 +100,7 @@ const ReceptionistTable = ({
           <TableBody>
             {currentItems.map((receptionist) => (
               <TableRow key={receptionist.id}>
+                <TableCell>{receptionist.id}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar>
@@ -126,15 +126,16 @@ const ReceptionistTable = ({
                 <TableCell>{receptionist.shift}</TableCell>
                 <TableCell>
                   <Badge
-                    variant={
+                    className={
                       receptionist.status === "active"
-                        ? "default"
+                        ? "bg-green-100 text-green-800 hover:bg-green-200 font-medium"
                         : receptionist.status === "on leave"
-                        ? "secondary"
-                        : "destructive"
+                        ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 font-medium"
+                        : "bg-red-100 text-red-800 hover:bg-red-200 font-medium"
                     }
                   >
-                    {receptionist.status}
+                    {receptionist.status.charAt(0).toUpperCase() +
+                      receptionist.status.slice(1)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">

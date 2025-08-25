@@ -1,7 +1,8 @@
-import { FaCheckCircle, FaClock, FaEllipsisV, FaNotesMedical, FaStethoscope, FaTimesCircle } from "react-icons/fa"
 import { MdAccessTime } from "react-icons/md"
+import { appointments } from "@/constants/doctor/appointments/todays-schedule"
+import { FaCheckCircle, FaClock, FaEllipsisV, FaNotesMedical, FaStethoscope, FaTimesCircle } from "react-icons/fa"
 
-const ScheduleTimeline = ({appointments}) => {
+const ScheduleTimeline = () => {
   return (
     <>
         <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-6">

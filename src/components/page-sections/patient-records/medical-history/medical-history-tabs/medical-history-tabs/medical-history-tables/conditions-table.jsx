@@ -13,39 +13,25 @@ import {
 } from "@/components/ui/table";
 import { TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight, FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
 import TableCardHead from "./table-card-head";
 import DeleteModal from "@/components/modals/common/delete-modal";
+import { conditionlist } from "@/constants/doctor/patient-records/medical-history";
 
 const ConditionsTable = () => {
-  const [medicalConditions, setMedicalConditions] = useState([
-    {
-      id: 1,
-      name: "Type 2 Diabetes",
-      date: "2018-05-15",
-      severity: "Moderate",
-      notes: "Controlled with medication",
-    },
-    {
-      id: 2,
-      name: "Hypertension",
-      date: "2017-11-22",
-      severity: "Mild",
-      notes: "Regular monitoring required",
-    },
-    {
-      id: 3,
-      name: "Asthma",
-      date: "2015-03-10",
-      severity: "Moderate",
-      notes: "Seasonal flare-ups",
-    },
-  ]);
+  const [medicalConditions, setMedicalConditions] = useState(conditionlist);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [conditionToDelete, setConditionToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(medicalConditions.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = medicalConditions.slice(startIndex, startIndex + itemsPerPage);
 
   // Handle delete confirmation
   const handleConfirmDelete = async () => {
@@ -53,7 +39,14 @@ const ConditionsTable = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setMedicalConditions(medicalConditions.filter(condition => condition.id !== conditionToDelete));
+      const updatedConditions = medicalConditions.filter(condition => condition.id !== conditionToDelete);
+      setMedicalConditions(updatedConditions);
+      
+      // Adjust current page if needed after deletion
+      if (currentItems.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+      
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Delete failed", error);
@@ -61,6 +54,32 @@ const ConditionsTable = () => {
       setIsDeleting(false);
       setConditionToDelete(null);
     }
+  };
+
+  // Handle page change
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // Generate page numbers for pagination controls
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    
+    return pageNumbers;
   };
 
   return (
@@ -80,7 +99,7 @@ const ConditionsTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {medicalConditions.map((condition) => (
+                {currentItems.map((condition) => (
                   <TableRow key={condition.id}>
                     <TableCell className="font-medium">
                       {condition.name}
@@ -121,6 +140,61 @@ const ConditionsTable = () => {
                 ))}
               </TableBody>
             </Table>
+            
+            {/* Pagination Controls */}
+            {medicalConditions.length > itemsPerPage && (
+              <div className="flex items-center justify-between mt-4">
+                <div className="text-sm text-muted-foreground">
+                  Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, medicalConditions.length)} of {medicalConditions.length} entries
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(1)}
+                    disabled={currentPage === 1}
+                  >
+                    <FiChevronsLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    <FiChevronLeft className="h-4 w-4" />
+                  </Button>
+                  
+                  {getPageNumbers().map(page => (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    <FiChevronRight className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(totalPages)}
+                    disabled={currentPage === totalPages}
+                  >
+                    <FiChevronsRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </TabsContent>

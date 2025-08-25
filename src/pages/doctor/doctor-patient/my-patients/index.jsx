@@ -6,7 +6,8 @@ import { useState } from 'react';
 
 const MyPatients = () => {
 
-      const [patientMdalOpen, setPatientModalOpen] = useState(false);
+      const [patientModalOpen, setPatientModalOpen] = useState(false);
+      const [editDetail,setEditDetail]=useState(null)
       const [newPatient, setNewPatient] = useState({
       name: "",
       age: "",
@@ -19,9 +20,9 @@ const MyPatients = () => {
   return (
     <div className="p-6 space-y-6 bg-blue-300 rounded-lg">
      <MyPatientHeader setPatientModalOpen={setPatientModalOpen} />
-     <MainPatientList/>
+     <MainPatientList setEditDetail={setEditDetail} setPatientModalOpen={setPatientModalOpen} />
 
-     <AddPatient setNewPatient={setNewPatient}  newPatient={newPatient} patientMdalOpen={patientMdalOpen} setPatientModalOpen={setPatientModalOpen}  />
+     <AddPatient setNewPatient={setNewPatient}  newPatient={newPatient} patientModalOpen={patientModalOpen} setPatientModalOpen={setPatientModalOpen} editDetail={editDetail} />
     </div>
   );
 };

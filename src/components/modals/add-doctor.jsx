@@ -44,7 +44,6 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    console.log("new name is khan")
     setCurrentDoctor(null);
     setFormData({
       name: "",
@@ -56,7 +55,7 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
   };
 
   return (
-    <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+    <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>{currentDoctor ? 'Edit Doctor' : 'Add New Doctor'}</DialogTitle>
@@ -73,7 +72,7 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
               <Input
                 id="name"
                 name="name"
-                value={formData.name}
+                value={formData?.name}
                 onChange={handleInputChange}
                 className="col-span-3"
                 required
@@ -84,7 +83,7 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
                 Specialty
               </label>
               <Select
-                value={formData.specialty}
+                value={formData?.specialty}
                 onValueChange={(value) => setFormData({...formData, specialty: value})}
               >
                 <SelectTrigger className="col-span-3">
@@ -105,7 +104,7 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
                 id="email"
                 name="email"
                 type="email"
-                value={formData.email}
+                value={formData?.email}
                 onChange={handleInputChange}
                 className="col-span-3"
                 required
@@ -119,7 +118,7 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
                 id="phone"
                 name="phone"
                 type="tel"
-                value={formData.phone}
+                value={formData?.phone}
                 onChange={handleInputChange}
                 className="col-span-3"
                 required
@@ -130,7 +129,7 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
                 Status
               </label>
               <Select
-                value={formData.status}
+                value={formData?.status}
                 onValueChange={(value) => setFormData({...formData, status: value})}
               >
                 <SelectTrigger className="col-span-3">
@@ -148,7 +147,7 @@ const AddDoctor = ({ doctors, setDoctors, setIsDialogOpen, isDialogOpen, current
             <DialogClose asChild>
               <Button variant="outline" onClick={handleCloseDialog}>Cancel</Button>
             </DialogClose>
-            <Button type="submit">
+            <Button type="submit" className="bg-primary-600 hover:bg-primary-700 text-white">
               {currentDoctor ? 'Update Doctor' : 'Add Doctor'}
             </Button>
           </DialogFooter>
